@@ -37,17 +37,35 @@ app.post("/api/favorites", async (req, res) => {
   }
 });
 
+app.get("/api/favorites/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userFavorites = await db
+      .select()
+      .from(favoritesTable)
+      .where(eq(favoritesTable.userId, userId));
+    res.status(200).json(userFavorites);
+  } catch (error) {
+    console.error("Error getting favorites:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.delete("/api/favorites/:userId/:recipeId", async (req, res) => {
   try {
     const { userId, recipeId } = req.params;
     const deletedFavorite = await db
       .delete(favoritesTable)
-      .where(and(eq(favoritesTable.userId, userId), eq(favoritesTable.recipeId, recipeId)));
+      .where(
+        and(
+          eq(favoritesTable.userId, userId),
+          eq(favoritesTable.recipeId, recipeId)
+        )
+      );
 
     res.status(200).json(deletedFavorite);
     console.log("Favorite deleted successfully");
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error deleting favorite:", error);
     res.status(500).json({ message: error.message });
   }
