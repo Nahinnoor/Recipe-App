@@ -3,11 +3,14 @@ import { ENV } from "./config/env.js";
 import { db } from "./config/db.js";
 import { favoritesTable } from "./db/schema.js";
 import { and, eq } from "drizzle-orm";
+import job from "./config/cron.js";
 
 const app = express();
 const PORT = ENV.PORT;
 
 app.use(express.json());
+
+if (ENV.NODE_ENV === "production") job.start();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
