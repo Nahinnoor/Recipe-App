@@ -1,0 +1,1 @@
+export const API_URL = "https://recipe-app-vl7f.onrender.com/api";
