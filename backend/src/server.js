@@ -10,6 +10,12 @@ const PORT = ENV.PORT;
 
 app.use(express.json());
 
+
+if (!process.env.API_URL) {
+  console.warn("API_URL not set, skipping keep-alive cron");
+  return;
+}
+
 if (ENV.NODE_ENV === "production") job.start();
 
 app.listen(PORT, () => {
